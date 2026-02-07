@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -45,11 +46,16 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
+            drivetrain.applyRequest(() -> {
+                // Apply a 10% deadband to the controller inputs to eliminate drift
+                double forward = MathUtil.applyDeadband(-joystick.getLeftY(), 0.1);
+                double strafe = MathUtil.applyDeadband(-joystick.getLeftX(), 0.1);
+                double turn = MathUtil.applyDeadband(-joystick.getRightX(), 0.1);
+
+                return drive.withVelocityX(forward * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(strafe * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(turn * MaxAngularRate); // Drive counterclockwise with negative X (left)
+            })
         );
 
         // Idle while the robot is disabled. This ensures the configured
