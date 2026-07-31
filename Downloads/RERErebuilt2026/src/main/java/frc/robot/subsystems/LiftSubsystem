@@ -1,0 +1,29 @@
+// package frc.robot.subsystems;
+
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+// public class LiftSubsystem extends SubsystemBase {
+
+// private final double kLoadThresholdAmps = 30.0; 
+// xbox.y().whileTrue(new InstantCommand(() -> emergencyStop = true));
+//     @Override
+//     public void periodic() {
+//         // SmartDashboard.putNumber("dwwwwwwwwwwwwwwwwwwwwwweddwedewdewde", emergencyStop);
+//         SmartDashboard.boolean("tripleT", emergencyStop);
+//         double currentAmps = liftMotor.getOutputCurrent();
+
+//         if (currentAmps > kLoadThresholdAmps) {
+//             System.out.println("EM stop Current: " + currentAmps + "A");
+//             liftMotor.stopMotor();
+//             emergencyStop = true
+//         }
+//         while (emergencyStop) {
+//          liftMotor.set(0.0);
+//         }
+        
+
+//     }
+
+// }
