@@ -1,0 +1,199 @@
+xbox.povLeft().onTrue(
+    Commands.runOnce(() -> {
+        if (O != null) {
+            O.play();
+        }
+    })
+);
+
+xbox.povRight().onTrue(
+    Commands.runOnce(() -> {
+        if (O != null) {
+            O.pause();
+        }
+    })
+);
+
+xbox.x().onTrue(
+    Commands.runOnce(() -> {
+        if (O != null) {
+            O.stop();
+        }
+    })
+);
+
+
+
+
+
+
+
+
+
+D:\Windows\security
+
+Windows Media Creation Tool 
+
+AOMEI 
+
+
+﻿﻿﻿﻿﻿﻿ Error at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:406): Could not instantiate robot frc.robot.subsystems.PIDtest! ﻿
+
+
+
+
+scp -r lvuser@roborio-1011-frc.local:\home\lvuser .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public enum ControlButtons{
+		A(1),
+		B(2),
+		X(3),
+		Y(4),
+		RIGHT_BUMPER(6),
+		LEFT_BUMPER(5),
+		BACK(7),
+		START(8),
+		LEFTJOY(9),
+		RIGHTJOY(10);
+		
+		int index;
+		private ControlButtons(int index){
+			this.index=index;
+		}
+		
+		public int getIndex(){
+			return index;
+		}
+	}
+	
+	public enum ControlAxis{
+		LEFT_X(0),
+		LEFT_Y(1),
+		RIGHT_X(4),
+		RIGHT_Y(5),
+		LEFT_TRIGGER(2),
+		RIGHT_TRIGGER(3);
+		
+		int index;
+		private ControlAxis(int index){
+			this.index=index;
+		}
+		
+		public int getIndex(){
+			return index;
+		}
+	}
+
+
+
+
+
+	Controls controls;
+	
+	GearCollector gearCollector;
+	Climber climber;
+	LEDs leds;
+	Drive drive;
+	Compressor compressor;
+	RNavX navX;
+	Systems robotSystems;
+	
+	Loop periodic;
+	
+	TrajectoryThang tt;
+
+	public void robotInit() {
+		//Config.init();
+		robotSystems = Systems.getInstance();
+		robotSystems.initiateSubsystems();
+		controls = robotSystems.controls;
+		climber = robotSystems.climber;
+		leds = robotSystems.leds;
+		drive = robotSystems.drive;
+		gearCollector = robotSystems.gearCollector;
+		compressor = robotSystems.compressor;
+		navX = (RNavX) robotSystems.getHashMap().get(SysObj.Sensors.NAVX);
+		
+		periodic = new Loop(this::periodic , 5);
+		periodic.start();
+		
+		tt = new TrajectoryThang();
+	}
+
+	@Override
+	public void autonomousInit(){
+		TrajectoryInterpreter ti = new TrajectoryInterpreter(drive.getRDriveTrain(), tt.trajectories,new HashMap<String, Runnable>());
+		ti.run();
+	}
+	
+
+
+
+	@Override
+	public void teleopPeriodic(){
+		//gearCollector.writeToSmartDashboard();
+		//climber.writeToSmartDashboard();
+		//drive.writeToSmartDashboard();
+		
+		controls.update();
+		if(controls.operatorAxis.get(ControlAxis.RIGHT_TRIGGER)>0.5){
+			gearCollector.setState(GCAState.SCORING);
+		}else if(controls.operatorAxis.get(ControlAxis.LEFT_TRIGGER)>0.5){
+			gearCollector.setState(GCAState.PICKUP);
+		}else if(controls.operatorButtons.get(ControlButtons.A)){
+			gearCollector.setState(GCAState.BEGINNING);
+		}
+		
+		if(controls.operatorButtons.get(ControlButtons.X)){
+			climber.setWinch(true);
+		}else{
+			climber.setWinch(false);
+		}
+		
+		if(controls.operatorButtons.get(ControlButtons.LEFT_BUMPER)){
+			leds.flashLEDS();
+		}
+		//slow for little children
+		double constant = 0.75;
+		double y = -controls.driverAxis.get(ControlAxis.LEFT_Y);
+		double x = controls.driverAxis.get(ControlAxis.RIGHT_X);
+		y = Math.abs(y)<0.2?0:y;
+		x = Math.abs(x)<0.2?0:x;
+		//.out.println(y);
+		drive.arcadeDrive(constant * y,constant * -x);
+		}
+
+
+
+
+
+
+double GEAR_RATIO = 5.0;
+
+double motorRotations = motor.getEncoder().getPosition();
+
+double armRotations = motorRotations / GEAR_RATIO;
+
+double armDegrees = armRotations * 360.0;
+
+
+if (armDegrees >= MAX_ANGLE && output > 0) {
+    output = 0;
+}
+
+if (armDegrees <= MIN_ANGLE && output < 0) {
+    output = 0;
+}
