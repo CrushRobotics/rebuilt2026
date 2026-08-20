@@ -58,7 +58,7 @@ public class RobotContainer {
 
 
 public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
- private final SparkMax liftMotor = new SparkMax(1, MotorType.kBrushless);
+ private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
 
 
 private void stopLift() {

@@ -115,9 +115,38 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledExit() {}
 
+
+    @Override
+    public void teleopPeriodic() {
+        // SparkMax motor = m_robotContainer.intake;
+        // double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
+
+        // output = Math.max(-0.5, Math.min(0.5, output));
+
+        // // motor.set(output);
+
+        // System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
+
+    }
+
     @Override
     public void autonomousInit() {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+        if (RobotBase.isReal()) {
+        SparkMax motor = m_robotContainer.intake;
+        double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
+
+        output = Math.max(-0.5, Math.min(0.5, output));
+
+        // motor.set(output);
+
+        System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
+
+
+
+            motor.set(output);
+        }
 
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
@@ -143,18 +172,6 @@ public class Robot extends TimedRobot {
         }
     }
 
-    @Override
-    public void teleopPeriodic() {
-        SparkMax motor = m_robotContainer.intake;
-        double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
-
-        output = Math.max(-0.5, Math.min(0.5, output));
-
-        motor.set(output);
-
-        System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
-
-    }
 
     @Override
     public void teleopExit() {
