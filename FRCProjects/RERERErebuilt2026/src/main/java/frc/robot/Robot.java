@@ -155,9 +155,9 @@ if (!status.isOK()) {
                 // cam start (backup: CameraServer.startAutomaticCapture();)
        if (RobotBase.isReal()) {
         // CameraServer.startAutomaticCapture(1);
-        UsbCamera cam =  CameraServer.startAutomaticCapture();
-        cam.setResolution(160, 120);
-        cam.setFPS(80);
+        UsbCamera benjaminnetanyahu =  CameraServer.startAutomaticCapture();
+        benjaminnetanyahu.setResolution(160, 120);
+        benjaminnetanyahu.setFPS(80);
         
         // MjpegServer server = (MjpegServer) CameraServer.getServer();
         // server.setCompression(80); //mess with //.
