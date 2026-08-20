@@ -5,6 +5,9 @@
 package frc.robot;
 
 import com.ctre.phoenix6.HootAutoReplay;
+import com.ctre.phoenix6.Orchestra;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
@@ -20,13 +23,24 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import com.ctre.phoenix6.HootAutoReplay;
+import com.ctre.phoenix6.Orchestra;
+import com.ctre.phoenix6.StatusCode;
 
 public class Robot extends TimedRobot {
+
+
+
+
+
+
+
+
+
     private Command m_autonomousCommand;
 
 
-    private static final double TARGET_ROTATIONS = 1.0;
+    private static final double TARGET_ROTATIONS = -50.0;
 
     // private SparkMax m_robotContainer.intake;
     private RelativeEncoder encoder;
@@ -36,8 +50,83 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
+
+
+
+    private static final int kFrontLeftDriveMotorId = 4;
+    private static final int kFrontLeftSteerMotorId = 3;
+    private static final int kFrontRightDriveMotorId = 6;
+    private static final int kFrontRightSteerMotorId = 5;
+    private static final int kBackLeftDriveMotorId = 8;
+    private static final int kBackLeftSteerMotorId = 7;
+    private static final int kBackRightDriveMotorId = 2;
+    private static final int kBackRightSteerMotorId = 1;
+
+
+
+
+
+Orchestra O = new Orchestra();
+
     @Override
     public void robotInit() {
+
+
+
+
+// orchestra
+    O = new Orchestra();
+
+    TalonFX FLD;
+    TalonFX FLS;
+    TalonFX FRD;
+    TalonFX FRS;
+    TalonFX BLD;
+    TalonFX BLS;
+    TalonFX BRD;
+    TalonFX BRS;
+
+
+        FLD = new TalonFX(kFrontLeftDriveMotorId);
+        FLS = new TalonFX(kFrontLeftSteerMotorId);
+        FRD = new TalonFX(kFrontRightDriveMotorId);
+        FRS = new TalonFX(kFrontRightSteerMotorId);
+        BLD = new TalonFX(kBackLeftDriveMotorId);
+        BLS = new TalonFX(kBackLeftSteerMotorId);
+        BRD = new TalonFX(kBackRightDriveMotorId);
+        BRS = new TalonFX(kBackRightSteerMotorId);
+    
+        O.addInstrument(FLD);
+        O.addInstrument(FLS);
+        O.addInstrument(FRD);
+        O.addInstrument(FRS);
+        O.addInstrument(BLD);
+        O.addInstrument(BLS);
+        O.addInstrument(BRD);
+        O.addInstrument(BRS);
+
+    
+
+        ///home/lvuser/deploy/
+        // 
+       StatusCode status = O.loadMusic("thunderstruck.chrp");
+    // StatusCode status = O.play();
+       
+if (!status.isOK()) {
+    System.out.println("ORCHESTRA LOAD FAILED: " + status);
+} else {
+    System.out.println("ORCHESTRA MUSIC LOADED");
+    O.play();
+}
+
+//orchestra
+
+
+
+
+
+
+
         SparkMax motor = m_robotContainer.intake;
         // motor.restoreFactoryDefaults();
 
