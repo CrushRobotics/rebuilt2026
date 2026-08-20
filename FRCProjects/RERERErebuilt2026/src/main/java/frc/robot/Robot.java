@@ -4,8 +4,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.HootAutoReplay;
+// import com.ctre.phoenix6.HootAutoReplay;
 import com.ctre.phoenix6.Orchestra;
+// import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -23,7 +24,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.TimedRobot;
-import com.ctre.phoenix6.HootAutoReplay;
+// import com.ctre.phoenix6.HootAutoReplay;
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.StatusCode;
 
@@ -71,7 +72,7 @@ Orchestra O = new Orchestra();
     @Override
     public void robotInit() {
 
-
+            // SignalLogger.deleteAll(); //RIP pheonix 5 :sob:
 
 
 // orchestra
@@ -140,11 +141,11 @@ if (!status.isOK()) {
         pidController.setTolerance(0.01);
     }
 
-
+//reAdd for comp
     /* log and replay timestamp and joystick data */
-    private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
-        .withTimestampReplay()
-        .withJoystickReplay();
+    // private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
+        // .withTimestampReplay()
+        // .withJoystickReplay();
 
     private final boolean kUseLimelight = false;
 
@@ -171,7 +172,7 @@ if (!status.isOK()) {
 
     @Override
     public void robotPeriodic() {
-        m_timeAndJoystickReplay.update();
+        // m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run();
 
         /*
