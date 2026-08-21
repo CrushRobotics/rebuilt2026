@@ -97,8 +97,6 @@ public void halfsec() {
 
 
     private final CommandXboxController joystick = new CommandXboxController(0);
-
-
     private final CommandXboxController player2 = new CommandXboxController(1);
 
 
@@ -123,10 +121,26 @@ public void halfsec() {
 
 
 
-        player2.rightTrigger(0.05).whileTrue(
+
+player2.leftBumper().whileTrue(
     Commands.run(
         () -> {
-            double trigger = joystick.getRightTriggerAxis();
+            up();
+        }
+    ).finallyDo(interrupted -> stopintake())
+);  
+player2.rightBumper().whileTrue(
+    Commands.run(
+        () -> {
+            down();
+        }
+    ).finallyDo(interrupted -> stopintake())
+);  
+
+        player2.leftTrigger(0.05).whileTrue(
+    Commands.run(
+        () -> {
+            double trigger = player2.getLeftTriggerAxis();
 
             double speed = (trigger <= 0.75)
                 ? (trigger / 0.75) * 1
@@ -140,10 +154,10 @@ public void halfsec() {
 );
 
 
-player2.leftTrigger(0.05).whileTrue(
+player2.rightTrigger(0.05).whileTrue(
     Commands.run(
         () -> {
-            double trigger = joystick.getLeftTriggerAxis();
+            double trigger = player2.getRightTriggerAxis();
 
             double speed = (trigger <= 0.75)
                 ? (trigger / 0.75) * 1
@@ -155,20 +169,6 @@ player2.leftTrigger(0.05).whileTrue(
         }
     ).finallyDo(interrupted -> stopLift())
 );
-player2.rightBumper().whileTrue(
-    Commands.run(
-        () -> {
-            up();
-        }
-    ).finallyDo(interrupted -> stopintake())
-);  
-player2.leftBumper().whileTrue(
-    Commands.run(
-        () -> {
-            down();
-        }
-    ).finallyDo(interrupted -> stopintake())
-);  
 
 
 
@@ -186,10 +186,10 @@ player2.leftBumper().whileTrue(
         forwardStraight.withVelocityX(0).withVelocityY(-0.5))
     );
     joystick.x().whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0).withVelocityY(0).withRotationalRate(0.5)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+        forwardStraight.withVelocityX(0).withVelocityY(0).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
     joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0).withVelocityY(0).withRotationalRate(-0.5)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+        forwardStraight.withVelocityX(0).withVelocityY(0).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 
 
@@ -203,7 +203,8 @@ player2.leftBumper().whileTrue(
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                // forwardStraight.withVelocityX(-joystick.getLeftY() * MaxSpeed) //robot centric
+                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) //field centric
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
