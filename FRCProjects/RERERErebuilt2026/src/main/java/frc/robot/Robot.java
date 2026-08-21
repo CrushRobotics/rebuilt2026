@@ -246,7 +246,7 @@ public void pain() {
 
         if (RobotBase.isReal()) {
  
-        pain();
+        // pain(); //off for comp
 
         }
 
