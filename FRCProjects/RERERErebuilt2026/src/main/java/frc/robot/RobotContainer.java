@@ -152,7 +152,7 @@ joystick.leftTrigger(0.05).whileTrue(
     ).finallyDo(interrupted -> stopLift())
 );
 
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        autoChooser = AutoBuilder.buildAutoChooser("Tests"); 
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
@@ -231,7 +231,7 @@ joystick.leftBumper().whileTrue(
         // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        // joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        joystick.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
