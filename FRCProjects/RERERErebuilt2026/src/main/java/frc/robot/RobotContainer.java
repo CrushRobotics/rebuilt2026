@@ -167,7 +167,8 @@ joystick.leftTrigger(0.05).whileTrue(
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                forwardStraight.withVelocityX(-joystick.getLeftY() * MaxSpeed) //robot centric
+                // drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) //field centric
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
