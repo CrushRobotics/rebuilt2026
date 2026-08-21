@@ -185,16 +185,6 @@ joystick.leftTrigger(0.05).whileTrue(
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
 
-        // joystick.povUp().whileTrue(drivetrain.applyRequest(() ->
-        //     forwardStraight.withVelocityX(0.5).withVelocityY(0))
-        // );
-        // joystick.povDown().whileTrue(drivetrain.applyRequest(() ->
-        //     forwardStraight.withVelocityX(-0.5).withVelocityY(0))
-        // );
-
-
-
-
 joystick.rightBumper().whileTrue(
     Commands.run(
         () -> {
