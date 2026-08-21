@@ -47,59 +47,14 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
-
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-
-    /* Path follower */
-    private final SendableChooser<Command> autoChooser;
-
-
-
-
 public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
  private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
+
 
 
 private void stopLift() {
      liftMotor.set(0.0);
 }
-
-
-
-
-
-
-
-
-
- private final CommandXboxController xbox = new CommandXboxController(0);
-
-    private void stoprum() {
-    xbox.setRumble(RumbleType.kBothRumble, 0.0);
-    }
-
-public void startrum() {
-xbox.setRumble(RumbleType.kBothRumble, 1.0);
-}
-
-public void halfsec() {
-    new SequentialCommandGroup(
-    new InstantCommand(this::startrum),
-    new WaitCommand(0.5),
-    new InstantCommand(this::stoprum)
-).schedule();
-
-}
-
-
-
-
-
-
-
-
-
 private void up() {
      intake.set(1);
  }
@@ -110,16 +65,65 @@ private void stopintake() {
      intake.set(0.0);
  }
 
+    private void stoprum() {
+    joystick.setRumble(RumbleType.kBothRumble, 0.0);
+    }
+
+public void startrum() {
+joystick.setRumble(RumbleType.kBothRumble, 1.0);
+}
+
+public void halfsec() {
+    new SequentialCommandGroup(
+    new InstantCommand(this::startrum),
+    new WaitCommand(0.5),
+    new InstantCommand(this::stoprum)
+).schedule();
 
 
 
-    
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+    private final CommandXboxController joystick = new CommandXboxController(0);
+
+
+    private final CommandXboxController player2 = new CommandXboxController(1);
+
+
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+    /* Path follower */
+    private final SendableChooser<Command> autoChooser;
+
     public RobotContainer() {
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        SmartDashboard.putData("Auto Mode", autoChooser);
+
+        configureBindings();
+
+        // Warmup PathPlanner to avoid Java pauses
+        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+    }
+
+    private void configureBindings() {
 
 
 
 
-        joystick.rightTrigger(0.05).whileTrue(
+
+        player2.rightTrigger(0.05).whileTrue(
     Commands.run(
         () -> {
             double trigger = joystick.getRightTriggerAxis();
@@ -136,7 +140,7 @@ private void stopintake() {
 );
 
 
-joystick.leftTrigger(0.05).whileTrue(
+player2.leftTrigger(0.05).whileTrue(
     Commands.run(
         () -> {
             double trigger = joystick.getLeftTriggerAxis();
@@ -151,55 +155,22 @@ joystick.leftTrigger(0.05).whileTrue(
         }
     ).finallyDo(interrupted -> stopLift())
 );
-
-        autoChooser = AutoBuilder.buildAutoChooser("Tests"); 
-        SmartDashboard.putData("Auto Mode", autoChooser);
-
-        configureBindings();
-
-        // Warmup PathPlanner to avoid Java pauses
-        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-    }
-
-    private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                forwardStraight.withVelocityX(-joystick.getLeftY() * MaxSpeed) //robot centric
-                // drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) //field centric
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
-
-        // Idle while the robot is disabled. This ensures the configured
-        // neutral mode is applied to the drive motors while disabled.
-        final var idle = new SwerveRequest.Idle();
-        RobotModeTriggers.disabled().whileTrue(
-            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
-        );
-
-        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        // ));
-
-joystick.rightBumper().whileTrue(
+player2.rightBumper().whileTrue(
     Commands.run(
         () -> {
             up();
         }
     ).finallyDo(interrupted -> stopintake())
 );  
-joystick.leftBumper().whileTrue(
+player2.leftBumper().whileTrue(
     Commands.run(
         () -> {
             down();
         }
     ).finallyDo(interrupted -> stopintake())
 );  
+
+
 
 
     joystick.povUp().whileTrue(drivetrain.applyRequest(() ->
@@ -224,12 +195,38 @@ joystick.leftBumper().whileTrue(
 
 
 
+
+
+
+        // Note that X is defined as forward according to WPILib convention,
+        // and Y is defined as to the left according to WPILib convention.
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
+
+        // Idle while the robot is disabled. This ensures the configured
+        // neutral mode is applied to the drive motors while disabled.
+        final var idle = new SwerveRequest.Idle();
+        RobotModeTriggers.disabled().whileTrue(
+            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
+        );
+
+        joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        // ));
+
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
         joystick.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
@@ -238,7 +235,7 @@ joystick.leftBumper().whileTrue(
     }
 
     public Command getAutonomousCommand() {
-    String autoName = SmartDashboard.getString("DB/String 0", "");
+     String autoName = SmartDashboard.getString("DB/String 0", "");
    
     return new PathPlannerAuto(autoName);
     }

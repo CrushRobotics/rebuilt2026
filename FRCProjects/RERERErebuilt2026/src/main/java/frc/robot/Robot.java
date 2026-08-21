@@ -226,6 +226,7 @@ if (!status.isOK()) {
 
 public void startintake() {
         SparkMax motor = m_robotContainer.intake;
+
         motor.set(0);
 }
 
