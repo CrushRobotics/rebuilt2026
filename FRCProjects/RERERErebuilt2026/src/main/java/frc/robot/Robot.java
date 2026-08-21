@@ -14,10 +14,14 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -41,7 +45,7 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
 
-    private static final double TARGET_ROTATIONS = -50.0;
+    private static final double TARGET_ROTATIONS = -1.87;
 
     // private SparkMax m_robotContainer.intake;
     private RelativeEncoder encoder;
@@ -111,7 +115,7 @@ Orchestra O = new Orchestra();
         ///home/lvuser/deploy/
         // 
        StatusCode status = O.loadMusic("thunderstruck.chrp");
-    // StatusCode status = O.play();
+       status = O.play();
        
 if (!status.isOK()) {
     System.out.println("ORCHESTRA LOAD FAILED: " + status);
@@ -129,7 +133,7 @@ if (!status.isOK()) {
 
 
         SparkMax motor = m_robotContainer.intake;
-        // motor.restoreFactoryDefaults();
+        // motor.restoreFactoryDefaults(); //Figure out later | not fully needed i *think*
 
         encoder = motor.getEncoder();
 
@@ -141,9 +145,9 @@ if (!status.isOK()) {
         pidController.setTolerance(0.01);
     }
 
-//reAdd for comp
-    /* log and replay timestamp and joystick data */
-    // private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
+    //reAdd for comp
+        /* log and replay timestamp and joystick data */
+        // private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
         // .withTimestampReplay()
         // .withJoystickReplay();
 
@@ -152,15 +156,11 @@ if (!status.isOK()) {
     public Robot() {
 
 
-                // cam start (backup: CameraServer.startAutomaticCapture();)
+        // cam start
        if (RobotBase.isReal()) {
-        // CameraServer.startAutomaticCapture(1);
         UsbCamera benjaminnetanyahu =  CameraServer.startAutomaticCapture();
         benjaminnetanyahu.setResolution(160, 120);
         benjaminnetanyahu.setFPS(80);
-        
-        // MjpegServer server = (MjpegServer) CameraServer.getServer();
-        // server.setCompression(80); //mess with //.
        } 
         // .
         
@@ -208,34 +208,45 @@ if (!status.isOK()) {
 
     @Override
     public void teleopPeriodic() {
-        // SparkMax motor = m_robotContainer.intake;
-        // double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
-
-        // output = Math.max(-0.5, Math.min(0.5, output));
-
-        // // motor.set(output);
 
         // System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
 
     }
+
+
+
+    private void stopintake() {
+       SparkMax motor = m_robotContainer.intake;
+        double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
+
+        output = Math.max(-0.1, Math.min(0.1, output));
+
+        motor.set(output);
+    }
+
+public void startintake() {
+        SparkMax motor = m_robotContainer.intake;
+        motor.set(0);
+}
+
+public void pain() {
+    new SequentialCommandGroup(
+    new InstantCommand(this::startintake),
+    new WaitCommand(0.67), //Adjust tmr
+    new InstantCommand(this::stopintake)
+).schedule();
+
+}
+
 
     @Override
     public void autonomousInit() {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
         if (RobotBase.isReal()) {
-        SparkMax motor = m_robotContainer.intake;
-        double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
+ 
+        pain();
 
-        output = Math.max(-0.5, Math.min(0.5, output));
-
-        // motor.set(output);
-
-        System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
-
-
-
-            motor.set(output);
         }
 
         if (m_autonomousCommand != null) {
