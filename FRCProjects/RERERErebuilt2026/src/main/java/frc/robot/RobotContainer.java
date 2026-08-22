@@ -193,8 +193,40 @@ player2.rightTrigger(0.05).whileTrue(
     );
 
 
-
-
+//begin precise movement while turning using adapted code, gonna be SUPER annoying
+//forward, turn right
+joystick.povUp().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(0).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//forward, turn left
+joystick.povUp().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(0).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//back, turn right
+joystick.povDown().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(0).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//back, turn left    
+joystick.povDown().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(0).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+/////////////////////////////////////////////////////begin turn
+//left, turn right
+joystick.povLeft().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0).withVelocityY(0.5).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//left, turn left
+joystick.povLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0).withVelocityY(0.5).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//right, turn right
+joystick.povRight().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0).withVelocityY(-0.5).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//right, turn left
+joystick.povRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0).withVelocityY(-0.5).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
 
 
 
@@ -203,7 +235,7 @@ player2.rightTrigger(0.05).whileTrue(
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                // forwardStraight.withVelocityX(-joystick.getLeftY() * MaxSpeed) //robot centric
+                // forwardStraight.withVelocityX(-joystick.getLeftY() * MaxSpeed) //robot centric //fix drifting
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) //field centric
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
@@ -218,9 +250,9 @@ player2.rightTrigger(0.05).whileTrue(
         );
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        // ));
+        joystick.b().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
