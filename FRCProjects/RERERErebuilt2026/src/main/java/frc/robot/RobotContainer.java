@@ -193,7 +193,7 @@ player2.rightTrigger(0.05).whileTrue(
     );
 
 
-//begin precise movement while turning using adapted code, gonna be SUPER annoying
+//begin precise movement while turning using adapted code
 //forward, turn right
 joystick.povUp().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0.5).withVelocityY(0).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
@@ -228,8 +228,60 @@ joystick.povRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0).withVelocityY(-0.5).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 
+//////////////////////////////////////////////////////sideways
+//up, right
+joystick.povRight().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//up, left
+joystick.povLeft().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//down, right
+joystick.povRight().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//down, left
+joystick.povRight().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+////////////////////////////////////////////////////sidways up + turning
+//up, right, right
+joystick.povRight().and(joystick.povUp()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//up, right, left
+joystick.povLeft().and(joystick.povUp()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
 
+//up, left, right
+joystick.povRight().and(joystick.povUp()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//up, left, left
+joystick.povRight().and(joystick.povUp()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+////////////////////////////////sideways down + turning
+//down, right, right
+joystick.povRight().and(joystick.povUp()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//down, right, left
+joystick.povLeft().and(joystick.povUp()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
 
+//down, left, right
+joystick.povRight().and(joystick.povUp()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+//down, left, left
+joystick.povRight().and(joystick.povUp()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+    );
+/////////////done
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
