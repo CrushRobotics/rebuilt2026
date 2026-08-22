@@ -238,11 +238,11 @@ joystick.povLeft().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 //down, right
-joystick.povRight().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povRight().and(joystick.povDown()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 //down, left
-joystick.povRight().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povLeft().and(joystick.povDown()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 ////////////////////////////////////////////////////sidways up + turning
