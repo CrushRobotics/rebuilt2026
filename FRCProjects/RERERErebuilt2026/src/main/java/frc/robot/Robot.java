@@ -160,7 +160,7 @@ if (!status.isOK()) {
        if (RobotBase.isReal()) {
         UsbCamera benjaminnetanyahu =  CameraServer.startAutomaticCapture();
         benjaminnetanyahu.setResolution(160, 120);
-        benjaminnetanyahu.setFPS(80);
+        benjaminnetanyahu.setFPS(40); //set lower for comp to reduce lag on rio
        } 
         // .
         
@@ -233,7 +233,7 @@ public void startintake() {
 public void pain() {
     new SequentialCommandGroup(
     new InstantCommand(this::startintake),
-    new WaitCommand(0.67), //Adjust tmr
+    new WaitCommand(0.67), //was gonna adjust, but not using for comp *yet*
     new InstantCommand(this::stopintake)
 ).schedule();
 
