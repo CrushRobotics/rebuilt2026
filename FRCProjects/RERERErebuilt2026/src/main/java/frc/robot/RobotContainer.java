@@ -230,55 +230,55 @@ joystick.povRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
 
 //////////////////////////////////////////////////////sideways
 //up, right
-joystick.povRight().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+joystick.povUpRight().whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(0))
     );
 //up, left
-joystick.povLeft().and(joystick.povUp()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+joystick.povUpLeft().whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(0))
     );
 //down, right
-joystick.povRight().and(joystick.povDown()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+joystick.povDownRight().whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(0))
     );
 //down, left
-joystick.povLeft().and(joystick.povDown()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
+joystick.povDownLeft().whileTrue(drivetrain.applyRequest(() ->
+        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(0))
     );
 ////////////////////////////////////////////////////sidways up + turning
 //up, right, right
-joystick.povRight().and(joystick.povUp()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povUpRight().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 //up, right, left
-joystick.povLeft().and(joystick.povUp()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povUpRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 
 //up, left, right
-joystick.povRight().and(joystick.povUp()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povUpLeft().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 //up, left, left
-joystick.povRight().and(joystick.povUp()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povUpLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 ////////////////////////////////sideways down + turning
 //down, right, right
-joystick.povRight().and(joystick.povDown()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povDownRight().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 //down, right, left
-joystick.povLeft().and(joystick.povDown()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povDownRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 
 //down, left, right
-joystick.povRight().and(joystick.povDown()).and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povDownLeft().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 //down, left, left
-joystick.povRight().and(joystick.povDown()).and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
+joystick.povDownLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
         forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
     );
 /////////////done
@@ -302,9 +302,9 @@ joystick.povRight().and(joystick.povDown()).and(joystick.x()).whileTrue(drivetra
         );
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        joystick.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
-        ));
+        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
+        // ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
