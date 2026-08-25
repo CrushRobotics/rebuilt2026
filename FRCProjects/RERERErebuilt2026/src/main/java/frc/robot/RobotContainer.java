@@ -7,6 +7,8 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentricFacingAngle;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -48,7 +50,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
 public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
- private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
+public final SparkMax liftMotor = new SparkMax(12, MotorType.kBrushless);
 
 
 
@@ -122,14 +124,14 @@ public void halfsec() {
 
 
 
-player2.leftBumper().whileTrue(
+joystick.leftBumper().whileTrue(
     Commands.run(
         () -> {
             up();
         }
     ).finallyDo(interrupted -> stopintake())
 );  
-player2.rightBumper().whileTrue(
+joystick.rightBumper().whileTrue(
     Commands.run(
         () -> {
             down();
@@ -137,10 +139,12 @@ player2.rightBumper().whileTrue(
     ).finallyDo(interrupted -> stopintake())
 );  
 
-        player2.leftTrigger(0.05).whileTrue(
+
+
+joystick.leftTrigger(0.05).whileTrue(
     Commands.run(
         () -> {
-            double trigger = player2.getLeftTriggerAxis();
+            double trigger = joystick.getLeftTriggerAxis();
 
             double speed = (trigger <= 0.75)
                 ? (trigger / 0.75) * 1
@@ -154,10 +158,10 @@ player2.rightBumper().whileTrue(
 );
 
 
-player2.rightTrigger(0.05).whileTrue(
+joystick.rightTrigger(0.05).whileTrue(
     Commands.run(
         () -> {
-            double trigger = player2.getRightTriggerAxis();
+            double trigger = joystick.getRightTriggerAxis();
 
             double speed = (trigger <= 0.75)
                 ? (trigger / 0.75) * 1
@@ -169,6 +173,50 @@ player2.rightTrigger(0.05).whileTrue(
         }
     ).finallyDo(interrupted -> stopLift())
 );
+
+
+
+
+
+
+
+
+
+
+
+
+//         player2.leftTrigger(0.05).whileTrue(
+//     Commands.run(
+//         () -> {
+//             double trigger = player2.getLeftTriggerAxis();
+
+//             double speed = (trigger <= 0.75)
+//                 ? (trigger / 0.75) * 1
+//                 : 1;
+//             {
+//     liftMotor.set(speed);
+// }
+
+//         }
+//     ).finallyDo(interrupted -> stopLift())
+// );
+
+
+// player2.rightTrigger(0.05).whileTrue(
+//     Commands.run(
+//         () -> {
+//             double trigger = player2.getRightTriggerAxis();
+
+//             double speed = (trigger <= 0.75)
+//                 ? (trigger / 0.75) * 1
+//                 : 1;
+
+//            {
+//     liftMotor.set(-speed);
+// }
+//         }
+//     ).finallyDo(interrupted -> stopLift())
+// );
 
 
 
@@ -193,100 +241,11 @@ player2.rightTrigger(0.05).whileTrue(
     );
 
 
-//begin precise movement while turning using adapted code
-//forward, turn right
-joystick.povUp().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(0).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//forward, turn left
-joystick.povUp().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(0).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//back, turn right
-joystick.povDown().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(0).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//back, turn left    
-joystick.povDown().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(0).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-/////////////////////////////////////////////////////begin turn
-//left, turn right
-joystick.povLeft().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0).withVelocityY(0.5).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//left, turn left
-joystick.povLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0).withVelocityY(0.5).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//right, turn right
-joystick.povRight().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0).withVelocityY(-0.5).withRotationalRate(-1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//right, turn left
-joystick.povRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0).withVelocityY(-0.5).withRotationalRate(1.0)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-
-//////////////////////////////////////////////////////sideways
-//up, right
-joystick.povUpRight().whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(0))
-    );
-//up, left
-joystick.povUpLeft().whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(0))
-    );
-//down, right
-joystick.povDownRight().whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(0))
-    );
-//down, left
-joystick.povDownLeft().whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(0))
-    );
-////////////////////////////////////////////////////sidways up + turning
-//up, right, right
-joystick.povUpRight().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//up, right, left
-joystick.povUpRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(-0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-
-//up, left, right
-joystick.povUpLeft().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//up, left, left
-joystick.povUpLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(0.5).withVelocityY(0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-////////////////////////////////sideways down + turning
-//down, right, right
-joystick.povDownRight().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//down, right, left
-joystick.povDownRight().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(-0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-
-//down, left, right
-joystick.povDownLeft().and(joystick.b()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(-1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-//down, left, left
-joystick.povDownLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
-        forwardStraight.withVelocityX(-0.5).withVelocityY(0.5).withRotationalRate(1)).finallyDo(interrupted -> forwardStraight.withRotationalRate(0))
-    );
-/////////////done
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
+            drivetrain.applyRequest(() -> // RobotCentric or drivetrain
                 // forwardStraight.withVelocityX(-joystick.getLeftY() * MaxSpeed) //robot centric //fix drifting
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) //field centric
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
