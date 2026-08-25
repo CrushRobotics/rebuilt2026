@@ -115,7 +115,7 @@ Orchestra O = new Orchestra();
         ///home/lvuser/deploy/
         // 
        StatusCode status = O.loadMusic("thunderstruck.chrp");
-       status = O.play();
+    //    status = O.play();
        
 if (!status.isOK()) {
     System.out.println("ORCHESTRA LOAD FAILED: " + status);
@@ -263,7 +263,7 @@ public void pain() {
 
     @Override
     public void teleopInit() {
-
+        O.play();
         if(RobotBase.isReal()) {
         pidController.reset();
         }
@@ -277,6 +277,7 @@ public void pain() {
 
     @Override
     public void teleopExit() {
+        O.play();
         SparkMax motor = m_robotContainer.intake;
         motor.stopMotor();
     }
