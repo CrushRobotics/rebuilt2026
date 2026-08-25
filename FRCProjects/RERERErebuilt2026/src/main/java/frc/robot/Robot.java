@@ -160,7 +160,7 @@ if (!status.isOK()) {
        if (RobotBase.isReal()) {
         UsbCamera benjaminnetanyahu =  CameraServer.startAutomaticCapture();
         benjaminnetanyahu.setResolution(160, 120);
-        benjaminnetanyahu.setFPS(40); //set lower for comp to reduce lag on rio
+        benjaminnetanyahu.setFPS(30); //set lower for comp to reduce lag on rio
        } 
         // .
         
