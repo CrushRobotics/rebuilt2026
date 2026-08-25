@@ -48,7 +48,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
 public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
- private final SparkMax liftMotor = new SparkMax(12, MotorType.kBrushless);
+ private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
 
 
 
