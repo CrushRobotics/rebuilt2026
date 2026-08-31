@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,6 +53,10 @@ public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
 
 
 
+
+public void yes() {
+drivetrain.applyRequest(() -> brake);
+} 
 private void stopLift() {
      liftMotor.set(0.0);
 }
@@ -96,7 +101,7 @@ public void halfsec() {
 
 
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
+    public CommandXboxController joystick = new CommandXboxController(0);
     private final CommandXboxController player2 = new CommandXboxController(1);
 
 
@@ -137,21 +142,7 @@ player2.rightBumper().whileTrue(
     ).finallyDo(interrupted -> stopintake())
 );  
 
-        player2.leftTrigger(0.05).whileTrue(
-    Commands.run(
-        () -> {
-            double trigger = player2.getLeftTriggerAxis();
 
-            double speed = (trigger <= 0.75)
-                ? (trigger / 0.75) * 1
-                : 1;
-            {
-    liftMotor.set(speed);
-}
-
-        }
-    ).finallyDo(interrupted -> stopLift())
-);
 
 
 player2.rightTrigger(0.05).whileTrue(
@@ -169,6 +160,45 @@ player2.rightTrigger(0.05).whileTrue(
         }
     ).finallyDo(interrupted -> stopLift())
 );
+
+
+
+        double brakepsy = joystick.getLeftY();
+        double brakepsx = joystick.getLeftY();
+            boolean byny = (brakepsy <= 0.05)
+                ? true
+                : false;
+ 
+            boolean bynx = (brakepsx <= 0.05)
+                ? true
+                : false;
+ 
+
+
+
+boolean moving = (byny == false || bynx == false) 
+    ? false
+    : true;
+
+while (moving == false) {
+    drivetrain.applyRequest(() -> brake); 
+}
+//         double brakeps = joystick.getLeftY();
+//             double byn = (brakeps <= 0.05)
+//                 ? 0
+//                 : 1;
+ 
+
+//  while (byn == 1) {
+//     yes();
+//  }
+        // byn.whileFalse(drivetrain.applyRequest(() -> brake));
+
+        // joystick.getLeftY().whileFalse(drivetrain.applyRequest(() -> brake));
+
+
+
+        // joystick.getLeftY().whileFalse(drivetrain.applyRequest(() -> brake));
 
 
 

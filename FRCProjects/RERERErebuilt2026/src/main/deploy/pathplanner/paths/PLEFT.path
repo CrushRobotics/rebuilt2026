@@ -1,0 +1,181 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.683319088319088,
+        "y": 7.407179487179487
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7194444444444443,
+        "y": 7.898148148148147
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.7452849002849002,
+        "y": 7.717264957264957
+      },
+      "prevControl": {
+        "x": 2.878637739845031,
+        "y": 7.6031244430353
+      },
+      "nextControl": {
+        "x": 0.6119320607247696,
+        "y": 7.831405471494614
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": -0.07655952380952302,
+        "y": 8.051714285714286
+      },
+      "prevControl": {
+        "x": 0.1623867753645548,
+        "y": 8.28147034261244
+      },
+      "nextControl": {
+        "x": -0.25676779003498673,
+        "y": 7.87843710665134
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7245868945868947,
+        "y": 6.993732193732194
+      },
+      "prevControl": {
+        "x": 0.8071745007689209,
+        "y": 7.229696782823699
+      },
+      "nextControl": {
+        "x": 0.6341452991452996,
+        "y": 6.735327635327636
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": -0.1798290598290595,
+        "y": 6.4381623931623935
+      },
+      "prevControl": {
+        "x": -0.18033822374250894,
+        "y": 6.688161874666075
+      },
+      "nextControl": {
+        "x": -0.16690883190883135,
+        "y": 0.0943304843304853
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.18193732193732226,
+        "y": 1.1844285714285707
+      },
+      "prevControl": {
+        "x": -0.4899145299145298,
+        "y": 1.2959116809116824
+      },
+      "nextControl": {
+        "x": 0.42856503963617965,
+        "y": 1.1435046314587596
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1543690476190485,
+        "y": 1.907869047619048
+      },
+      "prevControl": {
+        "x": 0.6463955045240669,
+        "y": 2.5674764841752182
+      },
+      "nextControl": {
+        "x": 3.3246904761904768,
+        "y": -0.9103095238095227
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": -0.07655952380952302,
+        "y": 0.5336182336182345
+      },
+      "prevControl": {
+        "x": 0.7632552910052915,
+        "y": 0.5336182336182345
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.2655601659750966,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 3.848962655601671,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 5,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 7.0,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.2446650124069465,
+      "maxWaypointRelativePos": 6.1627791563275665,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 7.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 7.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

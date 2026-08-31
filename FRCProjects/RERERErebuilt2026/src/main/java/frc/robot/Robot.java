@@ -209,6 +209,15 @@ if (!status.isOK()) {
     @Override
     public void teleopPeriodic() {
 
+        // double brakeps = m_robotContainer.joystick.getLeftY();
+        // double byn = (brakeps <= 0.05)
+        //     ? 0
+        //     : 1;
+
+        // while (byn == 0) {
+        //     m_robotContainer.yes();
+        // }
+
         // System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
 
     }
