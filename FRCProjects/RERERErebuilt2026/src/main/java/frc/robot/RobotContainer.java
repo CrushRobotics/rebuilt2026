@@ -6,12 +6,25 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.io.ObjectInputFilter.Config;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import com.revrobotics.spark.config.*;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfigAccessor;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -51,7 +64,13 @@ public class RobotContainer {
 public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
  private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
 
+private final SparkBaseConfig config = new SparkMaxConfig();
+RelativeEncoder encoder = liftMotor.getEncoder();
 
+public void reset() {
+encoder.setPosition(0.0);
+
+}
 
 
 public void yes() {
@@ -110,11 +129,44 @@ public void halfsec() {
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
+private final DigitalInput reset = new DigitalInput(0);
+
     public RobotContainer() {
+
+
+
+double climbdia = 2; //diameter of drum
+double ratio = 10; //gear ratio
+double climbin = 8; //height in inch
+
+double distperrot = climbdia * Math.PI;
+
+double climbrot = distperrot / ratio;
+
+config.encoder
+    .positionConversionFactor(climbrot)
+    .velocityConversionFactor(climbrot / 60);
+
+
+config.softLimit
+        .reverseSoftLimit(0)
+        .reverseSoftLimitEnabled(true)
+        .forwardSoftLimit(climbin)
+        .forwardSoftLimitEnabled(true);
+
+config.idleMode(IdleMode.kBrake);
+
+liftMotor.configure(config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kNoPersistParameters);
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         configureBindings();
+
+
+
+
+
+        
 
         // Warmup PathPlanner to avoid Java pauses
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
@@ -123,9 +175,9 @@ public void halfsec() {
     private void configureBindings() {
 
 
+Trigger codetrig = new Trigger(() -> !reset.get()); 
 
-
-
+codetrig.onTrue(Commands.run(() -> {reset();}));
 
 player2.leftBumper().whileTrue(
     Commands.run(
