@@ -132,16 +132,28 @@ public void halfsec() {
 private final DigitalInput reset = new DigitalInput(0);
 
     public RobotContainer() {
-
-
-
-double climbdia = 2; //diameter of drum
 double ratio = 25; //gear ratio
+
+
+// double sl = 0.787 / Math.PI;
+// double so = sl * ratio;
+
+
+// double mathundone = encoder.getPosition() * so;
+
+
+// double f = mathundone / ratio;
+// double ropediaperrot = f * 0.125; //diameter of rope to add per rotation calculated from gearratio *hopefully*
+
+double climbdia = 0.787;  //+ ropediaperrot; //diameter of drum
+
 double climbin = 8; //height in inch
 
 double distperrot = climbdia * Math.PI;
 
 double climbrot = distperrot / ratio;
+
+// double ropedia = 3;
 
 config.encoder
     .positionConversionFactor(climbrot)
