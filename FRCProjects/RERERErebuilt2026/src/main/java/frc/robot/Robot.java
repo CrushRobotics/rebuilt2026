@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import edu.wpi.first.wpilibj.PWM;
 // import com.ctre.phoenix6.HootAutoReplay;
 import com.ctre.phoenix6.Orchestra;
 // import com.ctre.phoenix6.SignalLogger;
@@ -35,7 +35,7 @@ import com.ctre.phoenix6.StatusCode;
 public class Robot extends TimedRobot {
 
 
-
+   private PWM ledPwm;
 
 
 
@@ -75,9 +75,12 @@ Orchestra O = new Orchestra();
 
     @Override
     public void robotInit() {
-
+        // ledPwm = new PWM(0);
+        ledPwm = new PWM(0);
             // SignalLogger.deleteAll(); //RIP pheonix 5 :sob:
-
+        // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0); 
+                // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+        ledPwm.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
 
 // orchestra
     O = new Orchestra();
@@ -208,6 +211,7 @@ if (!status.isOK()) {
 
     @Override
     public void teleopPeriodic() {
+                ledPwm.setPosition(0.5);
 
         // double brakeps = m_robotContainer.joystick.getLeftY();
         // double byn = (brakeps <= 0.05)

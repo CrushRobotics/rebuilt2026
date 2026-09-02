@@ -136,7 +136,7 @@ private final DigitalInput reset = new DigitalInput(0);
 
 
 double climbdia = 2; //diameter of drum
-double ratio = 10; //gear ratio
+double ratio = 25; //gear ratio
 double climbin = 8; //height in inch
 
 double distperrot = climbdia * Math.PI;
