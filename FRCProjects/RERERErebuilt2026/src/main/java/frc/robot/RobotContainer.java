@@ -8,8 +8,17 @@ import static edu.wpi.first.units.Units.*;
 
 import java.io.ObjectInputFilter.Config;
 
+
+
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.AudioConfigs;
+import com.ctre.phoenix6.configs.jni.ConfigJNI;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.spns.*;
 
 import com.revrobotics.spark.config.*;
 import com.revrobotics.spark.config.EncoderConfig;
@@ -47,30 +56,41 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    public boolean moving;
+    // private Robot m_robot;
+
+    private double MaxSpeed = 0.25 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+    public final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.10) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    public final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
     private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+    private final SwerveRequest.RobotCentric RC = new SwerveRequest.RobotCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.10)
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
+
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-public final SparkMax intake = new SparkMax(14, MotorType.kBrushless);
- private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
 
-private final SparkBaseConfig config = new SparkMaxConfig();
-RelativeEncoder encoder = liftMotor.getEncoder();
+    
+public final SparkMax intake = new SparkMax(3, MotorType.kBrushless);
+private final SparkMax liftMotor = new SparkMax(2, MotorType.kBrushless);
+//  public boolean AllowMusicDurDisable = true; //yup
+// private final SparkBaseConfig config = new SparkMaxConfig();
+// RelativeEncoder encoder = liftMotor.getEncoder();
 
-public void reset() {
-encoder.setPosition(0.0);
 
-}
+// public void reset() {
+// encoder.setPosition(0.0);
+
+// }
 
 
 public void yes() {
@@ -120,6 +140,11 @@ public void halfsec() {
 
 
 
+    
+    // public double getEncoderPosition() {
+    //     return encoder.getPosition();
+    // }
+
     public CommandXboxController joystick = new CommandXboxController(0);
     private final CommandXboxController player2 = new CommandXboxController(1);
 
@@ -129,46 +154,38 @@ public void halfsec() {
     /* Path follower */
     private final SendableChooser<Command> autoChooser;
 
-private final DigitalInput reset = new DigitalInput(0);
+// private final DigitalInput reset = new DigitalInput(0);
 
     public RobotContainer() {
-double ratio = 25; //gear ratio
+            // m_robot = new Robot();
+// DriverStation.silenceJoystickConnectionWarning(true);        
+// double ratio = 25; //gear ratio
+
+// double climbdia = 0.787; //diameter of drum
+
+// double climbin = 8; //height in inch
+
+// double distperrot = climbdia * Math.PI;
+
+// double climbrot = distperrot / ratio;
 
 
-// double sl = 0.787 / Math.PI;
-// double so = sl * ratio;
 
 
-// double mathundone = encoder.getPosition() * so;
+// config.encoder
+//     .positionConversionFactor(climbrot)
+//     .velocityConversionFactor(climbrot / 60);
 
 
-// double f = mathundone / ratio;
-// double ropediaperrot = f * 0.125; //diameter of rope to add per rotation calculated from gearratio *hopefully*
+// config.softLimit
+//         .reverseSoftLimit(0)
+//         .reverseSoftLimitEnabled(true)
+//         .forwardSoftLimit(climbin)
+//         .forwardSoftLimitEnabled(true);
 
-double climbdia = 0.787;  //+ ropediaperrot; //diameter of drum
+// config.idleMode(IdleMode.kBrake);
 
-double climbin = 8; //height in inch
-
-double distperrot = climbdia * Math.PI;
-
-double climbrot = distperrot / ratio;
-
-// double ropedia = 3;
-
-config.encoder
-    .positionConversionFactor(climbrot)
-    .velocityConversionFactor(climbrot / 60);
-
-
-config.softLimit
-        .reverseSoftLimit(0)
-        .reverseSoftLimitEnabled(true)
-        .forwardSoftLimit(climbin)
-        .forwardSoftLimitEnabled(true);
-
-config.idleMode(IdleMode.kBrake);
-
-liftMotor.configure(config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kNoPersistParameters);
+// liftMotor.configure(config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.PersistMode.kNoPersistParameters);
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -184,21 +201,104 @@ liftMotor.configure(config, SparkMax.ResetMode.kResetSafeParameters, SparkMax.Pe
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
     }
 
+
+private void getlock(){
+    boolean up = true;
+}
+
+ boolean yn = false;
+                
+private void lockclimb(){
+boolean yn = false;
+}
+
+
+private void unlockclimb(){
+ boolean yn = true;
+}
+            // boolean up = (yn = true)
+            //     ? true
+            //     : false;
+
+
+//     boolean up.whileTrue(
+//     Commands.run(
+//         () -> {
+//             double trigger = player2.getRightTriggerAxis();
+
+//             double speed = (trigger <= 0.75)
+//                 ? (trigger / 0.75) * 1
+//                 : 1;
+
+//            {
+//     liftMotor.set(-speed);
+// }
+//         }
+//     ).finallyDo(interrupted -> stopLift())
+// );
+
+// }
+
     private void configureBindings() {
+// player2.a().onTrue(
+//     Commands.run(
+//         () -> {
+// unlockclimb();
+//         }
+//     ).finallyDo(interrupted -> lockclimb()));   
+
+    
+
+joystick.rightTrigger(0.05).whileTrue(
+    Commands.run(
+        () -> {
+            double trigger = joystick.getRightTriggerAxis();
+
+            double speed = (trigger <= 0.75)
+                ? (trigger / 0.75) * 1
+                : 1;
+
+           {
+            if (yn = true) {
+    liftMotor.set(-speed);
+                
+            }
+}
+        }
+    ).finallyDo(interrupted -> stopLift())
+);
+
+joystick.leftTrigger(0.05).whileTrue(
+    Commands.run(
+        () -> {
+            double trigger = joystick.getLeftTriggerAxis();
+
+            double speed = (trigger <= 0.75)
+                ? (trigger / 0.75) * 1
+                : 1;
+
+           {
+            if (yn = true) {
+    liftMotor.set(speed);
+                
+            }
+}
+        }
+    ).finallyDo(interrupted -> stopLift())
+);
 
 
-Trigger codetrig = new Trigger(() -> !reset.get()); 
 
-codetrig.onTrue(Commands.run(() -> {reset();}));
 
-player2.leftBumper().whileTrue(
+
+joystick.leftBumper().whileTrue(
     Commands.run(
         () -> {
             up();
         }
     ).finallyDo(interrupted -> stopintake())
 );  
-player2.rightBumper().whileTrue(
+joystick.rightBumper().whileTrue(
     Commands.run(
         () -> {
             down();
@@ -209,61 +309,14 @@ player2.rightBumper().whileTrue(
 
 
 
-player2.rightTrigger(0.05).whileTrue(
-    Commands.run(
-        () -> {
-            double trigger = player2.getRightTriggerAxis();
 
-            double speed = (trigger <= 0.75)
-                ? (trigger / 0.75) * 1
-                : 1;
-
-           {
-    liftMotor.set(-speed);
-}
-        }
-    ).finallyDo(interrupted -> stopLift())
-);
-
-
-
+//peak defence
         double brakepsy = joystick.getLeftY();
         double brakepsx = joystick.getLeftY();
-            boolean byny = (brakepsy <= 0.05)
-                ? true
-                : false;
- 
-            boolean bynx = (brakepsx <= 0.05)
-                ? true
-                : false;
- 
-
-
-
-boolean moving = (byny == false || bynx == false) 
-    ? false
-    : true;
-
-while (moving == false) {
-    drivetrain.applyRequest(() -> brake); 
-}
-//         double brakeps = joystick.getLeftY();
-//             double byn = (brakeps <= 0.05)
-//                 ? 0
-//                 : 1;
- 
-
-//  while (byn == 1) {
-//     yes();
-//  }
-        // byn.whileFalse(drivetrain.applyRequest(() -> brake));
-
-        // joystick.getLeftY().whileFalse(drivetrain.applyRequest(() -> brake));
-
-
-
-        // joystick.getLeftY().whileFalse(drivetrain.applyRequest(() -> brake));
-
+        boolean moving = (brakepsy <= 0.1 && brakepsx <= 0.1) 
+            ? true
+            : false;
+//peak defence
 
 
 
@@ -396,7 +449,15 @@ joystick.povDownLeft().and(joystick.x()).whileTrue(drivetrain.applyRequest(() ->
         );
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
+// player2.a().onTrue(
+//     Commands.run(
+//         () -> {
+// unlockclimb();
+//         }
+//     ));
+
+
+// joystick.b().whileTrue(drivetrain.applyRequest(() ->
         //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         // ));
 

@@ -13,6 +13,10 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.hal.can.CANJNI;
+import edu.wpi.first.hal.can.CANStatus;
+
+import com.ctre.phoenix6.CANBus;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -77,8 +81,9 @@ public class TunerConstants {
 
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
-    public static final CANBus kCANBus = new CANBus("CrushSwerve", "./logs/example.hoot");
+    // public static final CANBus kCANBus = new CANBus("CrushSwerve", "./logs/example.hoot");
 
+    public static final CANBus kCANBus =  CANBus.roboRIO();
     // Measured robot speed (m/s) at 12 V applied output;
     // This is NOT the desired max robot speed - see MaxSpeed in RobotContainer instead;
     // This needs to be tuned to your individual robot

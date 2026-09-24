@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PWM;
 import com.ctre.phoenix6.Orchestra;
 // import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.AudioConfigs;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -33,9 +34,11 @@ import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.StatusCode;
 
 public class Robot extends TimedRobot {
+    Orchestra _orchestra;
+// public final TalonFX mmotor = new TalonFX(2);
 
 
-   private PWM ledPwm;
+//    private PWM ledPwm;
 
 
 
@@ -45,11 +48,11 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
 
-    private static final double TARGET_ROTATIONS = -1.87;
+    // private static final double TARGET_ROTATIONS = -1.87;
 
     // private SparkMax m_robotContainer.intake;
-    private RelativeEncoder encoder;
-    private PIDController pidController;
+    // private RelativeEncoder encoder;
+    // private PIDController pidController;
 
     
 
@@ -58,73 +61,82 @@ public class Robot extends TimedRobot {
 
 
 
-    private static final int kFrontLeftDriveMotorId = 4;
-    private static final int kFrontLeftSteerMotorId = 3;
-    private static final int kFrontRightDriveMotorId = 6;
-    private static final int kFrontRightSteerMotorId = 5;
-    private static final int kBackLeftDriveMotorId = 8;
-    private static final int kBackLeftSteerMotorId = 7;
-    private static final int kBackRightDriveMotorId = 2;
-    private static final int kBackRightSteerMotorId = 1;
+    // private static final int kFrontLeftDriveMotorId = 4;
+    // private static final int kFrontLeftSteerMotorId = 3;
+    // private static final int kFrontRightDriveMotorId = 6;
+    // private static final int kFrontRightSteerMotorId = 5;
+    // private static final int kBackLeftDriveMotorId = 8;
+    // private static final int kBackLeftSteerMotorId = 7;
+    // private static final int kBackRightDriveMotorId = 2;
+    // private static final int kBackRightSteerMotorId = 1;
 
 
 
 
 
-Orchestra O = new Orchestra();
+public Orchestra O = new Orchestra();
 
     @Override
     public void robotInit() {
+
+        // // ledPwm = new PWM(0);
         // ledPwm = new PWM(0);
-        ledPwm = new PWM(0);
-            // SignalLogger.deleteAll(); //RIP pheonix 5 :sob:
-        // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0); 
-                // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
-        ledPwm.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
+        //     // SignalLogger.deleteAll(); //RIP pheonix 5 :sob:
+        // // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0); 
+        //         // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
+        // ledPwm.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
 
 // orchestra
     O = new Orchestra();
 
-    TalonFX FLD;
-    TalonFX FLS;
-    TalonFX FRD;
-    TalonFX FRS;
-    TalonFX BLD;
-    TalonFX BLS;
-    TalonFX BRD;
-    TalonFX BRS;
+
+    // TalonFX FLD;
+    // TalonFX FLS;
+    // TalonFX FRD;
+    // TalonFX FRS;
+    // TalonFX BLD;
+    // TalonFX BLS;
+    // TalonFX BRD;
+    // TalonFX BRS;
+    // TalonFX fun2;
+    // TalonFX fun1;
 
 
-        FLD = new TalonFX(kFrontLeftDriveMotorId);
-        FLS = new TalonFX(kFrontLeftSteerMotorId);
-        FRD = new TalonFX(kFrontRightDriveMotorId);
-        FRS = new TalonFX(kFrontRightSteerMotorId);
-        BLD = new TalonFX(kBackLeftDriveMotorId);
-        BLS = new TalonFX(kBackLeftSteerMotorId);
-        BRD = new TalonFX(kBackRightDriveMotorId);
-        BRS = new TalonFX(kBackRightSteerMotorId);
+    //     FLD = new TalonFX(kFrontLeftDriveMotorId);
+    //     FLS = new TalonFX(kFrontLeftSteerMotorId);
+    //     FRD = new TalonFX(kFrontRightDriveMotorId);
+    //     FRS = new TalonFX(kFrontRightSteerMotorId);
+    //     BLD = new TalonFX(kBackLeftDriveMotorId);
+    //     BLS = new TalonFX(kBackLeftSteerMotorId);
+    //     BRD = new TalonFX(kBackRightDriveMotorId);
+    //     BRS = new TalonFX(kBackRightSteerMotorId);
     
-        O.addInstrument(FLD);
-        O.addInstrument(FLS);
-        O.addInstrument(FRD);
-        O.addInstrument(FRS);
-        O.addInstrument(BLD);
-        O.addInstrument(BLS);
-        O.addInstrument(BRD);
-        O.addInstrument(BRS);
+    //     // fun1 = new TalonFX(1);
+    //     // fun2 = new TalonFX(2);
 
-    
+    //     // O.addInstrument(fun2);
+    //     // O.addInstrument(fun1);
 
+        // O.addInstrument(FLD);
+        // O.addInstrument(FLS);
+        // O.addInstrument(FRD);
+        // O.addInstrument(FRS);
+        // O.addInstrument(BLD);
+        // O.addInstrument(BLS);
+        // O.addInstrument(BRD);
+        // O.addInstrument(BRS);
+
+            
         ///home/lvuser/deploy/
         // 
-       StatusCode status = O.loadMusic("thunderstruck.chrp");
-    //    status = O.play();
+       StatusCode status = O.loadMusic("yessir.chrp");
+       status = O.play();
        
 if (!status.isOK()) {
     System.out.println("ORCHESTRA LOAD FAILED: " + status);
 } else {
     System.out.println("ORCHESTRA MUSIC LOADED");
-    O.play();
+    
 }
 
 //orchestra
@@ -135,17 +147,17 @@ if (!status.isOK()) {
 
 
 
-        SparkMax motor = m_robotContainer.intake;
+        // SparkMax motor = m_robotContainer.intake;
         // motor.restoreFactoryDefaults(); //Figure out later | not fully needed i *think*
 
-        encoder = motor.getEncoder();
+        // encoder = motor.getEncoder();
 
 
-        encoder.setPosition(0);
+        // encoder.setPosition(0);
 
 
-        pidController = new PIDController(0.1, 0.0, 0.0);
-        pidController.setTolerance(0.01);
+        // pidController = new PIDController(0.1, 0.0, 0.0);
+        // pidController.setTolerance(0.01);
     }
 
     //reAdd for comp
@@ -175,6 +187,7 @@ if (!status.isOK()) {
 
     @Override
     public void robotPeriodic() {
+        
         // m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run();
 
@@ -211,7 +224,13 @@ if (!status.isOK()) {
 
     @Override
     public void teleopPeriodic() {
-                ledPwm.setPosition(0.5);
+        
+        while (m_robotContainer.moving == false) {
+            m_robotContainer.drivetrain.applyRequest(() -> m_robotContainer.brake); 
+        }
+
+        
+        // ledPwm.setPosition(0.5);
 
         // double brakeps = m_robotContainer.joystick.getLeftY();
         // double byn = (brakeps <= 0.05)
@@ -224,33 +243,34 @@ if (!status.isOK()) {
 
         // System.out.printf("Pos: %.2f, Output: %.2f%n", encoder.getPosition(), output);
 
+
     }
 
 
 
-    private void stopintake() {
-       SparkMax motor = m_robotContainer.intake;
-        double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
+    // private void stopintake() {
+    //    SparkMax motor = m_robotContainer.intake;
+    //     double output = pidController.calculate(encoder.getPosition(), TARGET_ROTATIONS);
 
-        output = Math.max(-0.1, Math.min(0.1, output));
+    //     output = Math.max(-0.1, Math.min(0.1, output));
 
-        motor.set(output);
-    }
+    //     motor.set(output);
+    // }
 
-public void startintake() {
-        SparkMax motor = m_robotContainer.intake;
+// public void startintake() {
+//         SparkMax motor = m_robotContainer.intake;
 
-        motor.set(0);
-}
+//         motor.set(0);
+// }
 
-public void pain() {
-    new SequentialCommandGroup(
-    new InstantCommand(this::startintake),
-    new WaitCommand(0.67), //was gonna adjust, but not using for comp *yet*
-    new InstantCommand(this::stopintake)
-).schedule();
+// public void pain() {
+//     new SequentialCommandGroup(
+//     new InstantCommand(this::startintake),
+//     new WaitCommand(0.67), //was gonna adjust, but not using for comp *yet*
+//     new InstantCommand(this::stopintake)
+// ).schedule();
 
-}
+// }
 
 
     @Override
@@ -276,10 +296,14 @@ public void pain() {
 
     @Override
     public void teleopInit() {
-        O.play();
-        if(RobotBase.isReal()) {
-        pidController.reset();
-        }
+        // TalonFX fun1 = new TalonFX(9);
+        // TalonFX fun2 = new TalonFX(41);
+        
+    // fun1.set(1);
+        // O.play();
+        // if(RobotBase.isReal()) {
+        // pidController.reset();
+        // }
 
 
         if (m_autonomousCommand != null) {
@@ -290,13 +314,15 @@ public void pain() {
 
     @Override
     public void teleopExit() {
-        O.play();
-        SparkMax motor = m_robotContainer.intake;
-        motor.stopMotor();
+    
+        // O.play();
+        // SparkMax motor = m_robotContainer.intake;
+        // motor.stopMotor();
     }
 
     @Override
     public void testInit() {
+        O.play();
         CommandScheduler.getInstance().cancelAll();
     }
 
