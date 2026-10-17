@@ -35,11 +35,6 @@ import com.ctre.phoenix6.StatusCode;
 
 public class Robot extends TimedRobot {
     Orchestra _orchestra;
-// public final TalonFX mmotor = new TalonFX(2);
-
-
-//    private PWM ledPwm;
-
 
 
 
@@ -47,14 +42,6 @@ public class Robot extends TimedRobot {
 
     private Command m_autonomousCommand;
 
-
-    // private static final double TARGET_ROTATIONS = -1.87;
-
-    // private SparkMax m_robotContainer.intake;
-    // private RelativeEncoder encoder;
-    // private PIDController pidController;
-
-    
 
     private final RobotContainer m_robotContainer;
 
@@ -78,13 +65,6 @@ public Orchestra O = new Orchestra();
 
     @Override
     public void robotInit() {
-
-        // // ledPwm = new PWM(0);
-        // ledPwm = new PWM(0);
-        //     // SignalLogger.deleteAll(); //RIP pheonix 5 :sob:
-        // // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0); 
-        //         // ledPwm.setBounds(2.0, 1.8, 1.5, 1.2, 1.0);
-        // ledPwm.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
 
 // orchestra
     O = new Orchestra();
@@ -175,7 +155,7 @@ if (!status.isOK()) {
        if (RobotBase.isReal()) {
         UsbCamera benjaminnetanyahu =  CameraServer.startAutomaticCapture();
         benjaminnetanyahu.setResolution(160, 120);
-        benjaminnetanyahu.setFPS(30); //set lower for comp to reduce lag on rio
+        benjaminnetanyahu.setFPS(30);
        } 
         // .
         
@@ -225,9 +205,9 @@ if (!status.isOK()) {
     @Override
     public void teleopPeriodic() {
         
-        while (m_robotContainer.moving == false) {
-            m_robotContainer.drivetrain.applyRequest(() -> m_robotContainer.brake); 
-        }
+        // while (m_robotContainer.moving == false) {
+        //     m_robotContainer.drivetrain.applyRequest(() -> m_robotContainer.brake); 
+        // }
 
         
         // ledPwm.setPosition(0.5);
@@ -296,14 +276,6 @@ if (!status.isOK()) {
 
     @Override
     public void teleopInit() {
-        // TalonFX fun1 = new TalonFX(9);
-        // TalonFX fun2 = new TalonFX(41);
-        
-    // fun1.set(1);
-        // O.play();
-        // if(RobotBase.isReal()) {
-        // pidController.reset();
-        // }
 
 
         if (m_autonomousCommand != null) {
@@ -315,9 +287,6 @@ if (!status.isOK()) {
     @Override
     public void teleopExit() {
     
-        // O.play();
-        // SparkMax motor = m_robotContainer.intake;
-        // motor.stopMotor();
     }
 
     @Override
